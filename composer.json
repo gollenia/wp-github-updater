@@ -1,0 +1,16 @@
+{
+	"name": "contexis/wp-github-updater",
+	"description": "GitHub release based WordPress plugin updater",
+	"type": "library",
+	"license": "GPL-2.0-or-later",
+	"version": "0.1.0",
+	"autoload": {
+		"psr-4": {
+			"Contexis\\WpGitHubUpdater\\": "src/"
+		}
+	},
+	"config": {
+		"optimize-autoloader": true,
+		"sort-packages": true
+	}
+}
