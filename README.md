@@ -37,7 +37,7 @@ redirect.
 
 If you are also looking for reusable GitHub Actions, see:
 
-- `https://github.com/gollenia/github-actions/tree/main`
+- `https://github.com/gollenia/github-actions`
 
 Your repository should use release tags like:
 
@@ -79,9 +79,11 @@ $plugin = PluginMetadata::fromPluginFile(__FILE__);
 $repository = GitHubRepository::from('vendor', 'plugin-repo');
 $releaseProvider = GitHubReleaseProvider::forPlugin($repository, $plugin);
 
-(new WordPressPluginUpdater(
+$updater = new WordPressPluginUpdater(
     plugin: $plugin,
     repository: $repository,
     releaseProvider: $releaseProvider,
-))->registerHooks();
+);
+
+$updater->registerHooks();
 ```
