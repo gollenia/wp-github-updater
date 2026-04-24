@@ -13,6 +13,21 @@ final class WordPressPluginUpdater
 	) {
 	}
 
+	public static function fromPluginFile(
+		string $pluginFile,
+		string $owner,
+		string $repositoryName,
+	): self {
+		$plugin = PluginMetadata::fromPluginFile($pluginFile);
+		$repository = GitHubRepository::from($owner, $repositoryName);
+
+		return new self(
+			plugin: $plugin,
+			repository: $repository,
+			releaseProvider: GitHubReleaseProvider::forPlugin($repository, $plugin),
+		);
+	}
+
 	public function registerHooks(): void
 	{
 		add_filter('site_transient_update_plugins', [$this, 'checkForUpdate']);

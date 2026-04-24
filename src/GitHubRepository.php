@@ -12,6 +12,11 @@ final readonly class GitHubRepository
 	) {
 	}
 
+	public static function from(string $owner, string $name): self
+	{
+		return new self($owner, $name);
+	}
+
 	public function releasesUrl(): string
 	{
 		return "https://github.com/{$this->owner}/{$this->name}/releases";

@@ -15,18 +15,14 @@ Small Composer package for WordPress plugin update checks based on GitHub releas
 ## Usage
 
 ```php
-use Contexis\WpGitHubUpdater\GitHubReleaseProvider;
-use Contexis\WpGitHubUpdater\GitHubRepository;
-use Contexis\WpGitHubUpdater\PluginMetadata;
 use Contexis\WpGitHubUpdater\WordPressPluginUpdater;
 
-$plugin = PluginMetadata::fromPluginFile(__FILE__);
-$repository = new GitHubRepository('vendor', 'plugin-repo');
-$releaseProvider = new GitHubReleaseProvider($repository, (string) $plugin->data['Version']);
-
-(new WordPressPluginUpdater(
-    plugin: $plugin,
-    repository: $repository,
-    releaseProvider: $releaseProvider,
-))->registerHooks();
+WordPressPluginUpdater::fromPluginFile(
+    pluginFile: __FILE__,
+    owner: 'vendor',
+    repositoryName: 'plugin-repo',
+)->registerHooks();
 ```
+
+For the lower-level API, `fallbackVersion` is optional. If you pass one manually,
+it should usually be the currently installed plugin version.
