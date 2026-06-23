@@ -89,31 +89,11 @@ final class WordPressPluginUpdater
 		$info->homepage = $this->repository->releasesUrl();
 		$info->download_link = $this->repository->downloadSourceUrl($release->tag);
 		$info->sections = [
-			'description' => $this->readDescription(),
+			'description' => (string) $this->plugin->data['Description'],
 			'changelog' => 'See changelog on <a href="' . esc_url($this->repository->releasesUrl()) . '">GitHub</a>',
 		];
 
 		return $info;
 	}
-
-	private function readDescription(): string
-	{
-		$basePath = dirname($this->plugin->pluginFile);
-		$candidates = [
-			$basePath . '/readme.md',
-			$basePath . '/README.md',
-			$basePath . '/readme.txt',
-			$basePath . '/README.txt',
-		];
-
-		foreach ($candidates as $candidate) {
-			if (is_readable($candidate)) {
-				$content = file_get_contents($candidate);
-
-				return is_string($content) ? $content : '';
-			}
-		}
-
-		return '';
-	}
 }
+
