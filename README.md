@@ -19,16 +19,19 @@ use Contexis\WpGitHubUpdater\WordPressPluginUpdater;
 
 WordPressPluginUpdater::fromPluginFile(
     pluginFile: __FILE__,
-    owner: 'vendor',
-    repositoryName: 'plugin-repo',
 )->registerHooks();
 ```
 
 This is the intended default API. In the common case you only need:
 
 - the main plugin file path
-- the GitHub owner
-- the GitHub repository name
+- a `Plugin URI` header pointing to `https://github.com/<owner>/<repository>`
+
+The release asset name is derived from the main plugin file. For example,
+`my-plugin.php` requires the asset `my-plugin.zip`.
+
+You may still pass `owner` and `repositoryName` explicitly when the Plugin URI
+does not point at GitHub.
 
 ## Release Conventions
 

@@ -12,7 +12,7 @@ final readonly class ReleaseInfo
 	) {
 	}
 
-	public function fromTag(string $tag): self
+	public static function fromTag(string $tag): self
 	{
 		return new self(
 			version: self::normalizeVersion($tag),

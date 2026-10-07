@@ -10,6 +10,7 @@ final readonly class PluginMetadata
 		public string $pluginFile,
 		public string $pluginSlug,
 		public string $slug,
+		public string $packageName,
 		public array $data,
 	) {
 	}
@@ -26,6 +27,7 @@ final readonly class PluginMetadata
 			pluginFile: $pluginFile,
 			pluginSlug: $pluginSlug,
 			slug: dirname($pluginSlug),
+			packageName: pathinfo(basename($pluginFile), PATHINFO_FILENAME),
 			data: get_plugin_data($pluginFile),
 		);
 	}

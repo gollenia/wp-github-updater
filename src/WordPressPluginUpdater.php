@@ -15,11 +15,16 @@ final class WordPressPluginUpdater
 
 	public static function fromPluginFile(
 		string $pluginFile,
-		string $owner,
-		string $repositoryName,
+		?string $owner = null,
+		?string $repositoryName = null,
 	): self {
 		$plugin = PluginMetadata::fromPluginFile($pluginFile);
-		$repository = GitHubRepository::from($owner, $repositoryName);
+		$repository = ($owner === null && $repositoryName === null)
+			? GitHubRepository::fromPluginUri((string) ($plugin->data['PluginURI'] ?? ''))
+			: GitHubRepository::from(
+				$owner ?? throw new \InvalidArgumentException('Both GitHub owner and repository name must be provided together.'),
+				$repositoryName ?? throw new \InvalidArgumentException('Both GitHub owner and repository name must be provided together.'),
+			);
 
 		return new self(
 			plugin: $plugin,
@@ -60,7 +65,7 @@ final class WordPressPluginUpdater
 			'plugin' => $this->plugin->pluginSlug,
 			'new_version' => $release->version,
 			'url' => (string) ($data['PluginURI'] ?? ''),
-			'package' => $this->repository->downloadPackageUrl($release->version),
+			'package' => $this->repository->downloadPackageUrl($release->version, $this->plugin->packageName),
 			'requires' => (string) ($data['RequiresWP'] ?? ''),
 			'tested' => (string) ($data['Tested'] ?? ''),
 			'last_updated' => (string) ($data['LastUpdated'] ?? ''),
@@ -96,4 +101,3 @@ final class WordPressPluginUpdater
 		return $info;
 	}
 }
-
