@@ -58,6 +58,7 @@ final class GitHubReleaseProvider
 	public function clearCache(): void
 	{
 		delete_transient($this->repository->cacheKey());
+		delete_transient($this->repository->cacheKey() . '_manual_refresh');
 	}
 
 	public function refreshLatestRelease(): ReleaseInfo

@@ -59,6 +59,11 @@ final readonly class GitHubRepository
 		return "https://github.com/{$this->owner}/{$this->name}/archive/refs/tags/{$tag}.zip";
 	}
 
+	public function changelogUrl(string $tag): string
+	{
+		return "https://raw.githubusercontent.com/{$this->owner}/{$this->name}/{$tag}/CHANGELOG.md";
+	}
+
 	public function cacheKey(): string
 	{
 		return 'ghup_' . md5($this->owner . '/' . $this->name);
