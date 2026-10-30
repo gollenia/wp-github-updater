@@ -44,13 +44,13 @@ If you are also looking for reusable GitHub Actions, see:
 
 Your repository should use release tags like:
 
-- `v1.2.3`
+
 - `1.2.3`
 
 The download URL for updates is built as:
 
 ```text
-https://github.com/<owner>/<repo>/releases/download/v<version>/<repo>.zip
+https://github.com/<owner>/<repo>/releases/download/<version>/<repo>.zip
 ```
 
 So your release asset should usually be named `<repo>.zip`.

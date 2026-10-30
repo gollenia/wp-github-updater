@@ -51,7 +51,7 @@ final readonly class GitHubRepository
 
 	public function downloadPackageUrl(string $version, string $packageName): string
 	{
-		return "https://github.com/{$this->owner}/{$this->name}/releases/download/v{$version}/{$packageName}.zip";
+		return "https://github.com/{$this->owner}/{$this->name}/releases/download/{$version}/{$packageName}.zip";
 	}
 
 	public function downloadSourceUrl(string $tag): string
