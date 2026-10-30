@@ -44,6 +44,39 @@ If you are also looking for reusable GitHub Actions, see:
 
 Your repository should use release tags without a `v` prefix, for example `1.2.3`.
 
+## Releasing a plugin
+
+Install this package in the plugin project and configure its main file in that
+project's `composer.json`:
+
+```json
+{
+  "extra": {
+    "wp-github-release": {
+      "plugin_file": "my-plugin.php",
+      "php_constants": [{"file": "includes/version.php", "constant": "MY_PLUGIN_VERSION"}],
+      "build_command": "npm run build"
+    }
+  }
+}
+```
+
+The optional `readme.txt`, `package.json`, and `composer.json` version
+fields are updated when present. The command checks for a clean Git tree and an
+unused tag, then updates only the known version fields, runs the configured
+build, commits, and creates an annotated tag:
+
+```bash
+vendor/bin/wp-github-release patch
+vendor/bin/wp-github-release minor --push
+vendor/bin/wp-github-release patch --dry-run
+```
+
+`--push` is required to push the commit and tag. Pushing the tag is intended
+to trigger the repository's existing GitHub Actions workflow; this tool never
+creates a GitHub Release through the API. Use `--root=/path/to/plugin` when
+running the binary outside the plugin root.
+
 The download URL for updates is built as:
 
 ```text

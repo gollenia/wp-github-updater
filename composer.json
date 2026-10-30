@@ -9,6 +9,12 @@
 			"Contexis\\WpGitHubUpdater\\": "src/"
 		}
 	},
+	"bin": [
+		"bin/wp-github-release"
+	],
+	"scripts": {
+		"test": "php tests/run.php"
+	},
 	"config": {
 		"optimize-autoloader": true,
 		"sort-packages": true

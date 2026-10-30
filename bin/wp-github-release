@@ -1,0 +1,35 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+$autoload = $_composer_autoload_path ?? dirname(__DIR__) . '/vendor/autoload.php';
+require $autoload;
+
+use Contexis\WpGitHubUpdater\Release\ReleaseCommand;
+
+$arguments = $argv;
+array_shift($arguments);
+$part = array_shift($arguments);
+if (!in_array($part, ['patch', 'minor', 'major'], true)) {
+	fwrite(STDERR, "Usage: wp-github-release <patch|minor|major> [--push] [--dry-run] [--root=PATH]\n");
+	exit(2);
+}
+
+$push = in_array('--push', $arguments, true);
+$dryRun = in_array('--dry-run', $arguments, true);
+$root = getcwd() ?: '.';
+foreach ($arguments as $argument) {
+	if (str_starts_with($argument, '--root=')) $root = substr($argument, 7);
+	elseif (!in_array($argument, ['--push', '--dry-run'], true)) {
+		fwrite(STDERR, "Unknown option: {$argument}\n");
+		exit(2);
+	}
+}
+
+try {
+	exit((new ReleaseCommand())->run($part, $push, $dryRun, $root));
+} catch (Throwable $error) {
+	fwrite(STDERR, "Release aborted: {$error->getMessage()}\n");
+	exit(1);
+}
