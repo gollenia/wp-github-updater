@@ -38,6 +38,7 @@ assertSame(true, str_contains((string) file_get_contents("{$root}/version.php"),
 assertSame(true, str_contains((string) file_get_contents("{$root}/package.json"), '1.2.4'));
 assertSame('1.2.4', trim(command('git tag --list 1.2.4', $root)));
 file_put_contents("{$root}/dirty.txt", 'dirty');
+assertSame(0, (new ReleaseCommand())->run('minor', false, true, $root));
 try {
 	(new ReleaseCommand())->run('patch', false, false, $root);
 	throw new RuntimeException('Dirty tree accepted');

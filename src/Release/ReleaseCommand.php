@@ -14,7 +14,6 @@ final class ReleaseCommand
 		$current = $files->currentVersion();
 		$next = $current->bump($part);
 		$tag = $config->tagPrefix . $next;
-		$git->ensureClean();
 		$git->ensureTagMissing($tag);
 
 		if ($dryRun) {
@@ -25,6 +24,8 @@ final class ReleaseCommand
 			echo $push ? "Push: yes\n" : "Push: no\n";
 			return 0;
 		}
+
+		$git->ensureClean();
 
 		try {
 			$changed = $files->update($next);
