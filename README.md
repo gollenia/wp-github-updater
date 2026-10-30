@@ -42,10 +42,7 @@ If you are also looking for reusable GitHub Actions, see:
 
 - `https://github.com/gollenia/github-actions`
 
-Your repository should use release tags like:
-
-
-- `1.2.3`
+Your repository should use release tags without a `v` prefix, for example `1.2.3`.
 
 The download URL for updates is built as:
 
