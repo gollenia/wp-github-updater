@@ -37,9 +37,21 @@ final class WordPressPluginUpdater
 	{
 		add_filter('site_transient_update_plugins', [$this, 'checkForUpdate']);
 		add_filter('plugins_api', [$this, 'pluginInfo'], 10, 3);
+		add_action('load-plugins.php', [$this, 'refreshUpdatesOnPluginsPage']);
 		register_activation_hook($this->plugin->pluginFile, function (): void {
 			$this->releaseProvider->clearCache();
 		});
+	}
+
+	public function refreshUpdatesOnPluginsPage(): void
+	{
+		if (!current_user_can('update_plugins')) {
+			return;
+		}
+
+		$this->releaseProvider->refreshLatestRelease();
+		delete_site_transient('update_plugins');
+		wp_update_plugins();
 	}
 
 	public function checkForUpdate(mixed $transient): mixed
@@ -81,7 +93,7 @@ final class WordPressPluginUpdater
 			return $result;
 		}
 
-		$release = $this->releaseProvider->getLatestRelease();
+		$release = $this->releaseProvider->refreshLatestRelease();
 		if ($release->version === '') {
 			return $result;
 		}

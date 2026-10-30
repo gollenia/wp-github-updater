@@ -6,6 +6,8 @@ namespace Contexis\WpGitHubUpdater;
 
 final class GitHubReleaseProvider
 {
+	private const MANUAL_REFRESH_INTERVAL = 300;
+
 	public function __construct(
 		private readonly GitHubRepository $repository,
 		private readonly ?string $fallbackTag = null,
@@ -22,9 +24,9 @@ final class GitHubReleaseProvider
 		);
 	}
 
-	public function getLatestRelease(): ReleaseInfo
+	public function getLatestRelease(bool $forceRefresh = false): ReleaseInfo
 	{
-		$cached = get_transient($this->repository->cacheKey());
+		$cached = $forceRefresh ? false : get_transient($this->repository->cacheKey());
 		if (is_string($cached) && $cached !== '') {
 			return ReleaseInfo::fromTag($cached);
 		}
@@ -56,6 +58,17 @@ final class GitHubReleaseProvider
 	public function clearCache(): void
 	{
 		delete_transient($this->repository->cacheKey());
+	}
+
+	public function refreshLatestRelease(): ReleaseInfo
+	{
+		$refreshKey = $this->repository->cacheKey() . '_manual_refresh';
+		if (get_transient($refreshKey)) {
+			return $this->getLatestRelease();
+		}
+
+		set_transient($refreshKey, 1, self::MANUAL_REFRESH_INTERVAL);
+		return $this->getLatestRelease(true);
 	}
 
 	private function fallbackRelease(): ReleaseInfo
